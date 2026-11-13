@@ -1,0 +1,17 @@
+node_modules/
+.next/
+
+# Environment files: real secrets never go to GitHub, only the .env.example templates
+.env
+.env.*
+!.env.example
+
+uploads/*
+!uploads/demo/
+
+# Local SQLite database (also the -wal / -shm files)
+backend/database/*.sqlite*
+backups/
+
+# cPanel upload packages and passwords made by cpanel-deploy.js
+deploy/

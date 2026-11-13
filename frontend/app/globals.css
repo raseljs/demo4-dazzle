@@ -1,0 +1,187 @@
+@import "tailwindcss" source(none);
+
+/* Scan these folders for class names (explicit, so it works in any folder/path) */
+@source "../app";
+@source "../components";
+@source "../lib";
+
+/* Admin colours (Settings → General) still drive the admin panel. The shop itself uses the
+   black / gold / cream palette below: app/(store)/layout.js sets --primary and --brand for the shop pages. */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-brand: var(--brand);
+  /* Bangla font is NOT in the main stack: every price has ৳, which would make every page download it (~80KB).
+     The phone/PC draws ৳ with its own font; Bangla headings/buttons use .font-bn */
+  --font-sans: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Shop palette */
+@theme {
+  --color-ink: #111111;
+  --color-ink-2: #222222;
+  --color-cream: #fffbf6;
+  --color-sand: #fdf6ec;
+  --color-surface: #f5f5f5;
+  --color-gold: #d4a97a;
+  --color-gold-soft: #f1dcc2;
+  --color-gold-line: #e9ccae;
+  --color-gold-deep: #b57908;
+  --color-bronze: #6d3f0e;
+  --color-umber: #5e3610;
+  --color-sale: #ff7575;
+  --color-instock: #03a000;
+}
+
+:root {
+  --primary: #fc6d04;
+  --brand: #0054cf;
+}
+
+@layer base {
+  body { @apply bg-white text-slate-800 antialiased; }
+  button, [role='button'] { cursor: pointer; }
+  input[type='number']::-webkit-inner-spin-button { opacity: 0.4; }
+}
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-[1420px] px-4 md:px-[50px]; }
+
+  /* Gold section headings: dark → gold sweep, readable on the cream page */
+  .title-gold {
+    background-image: linear-gradient(90deg, #101518 0%, #b88b5e 46%, #b57908 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .title-gold-light {
+    background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #e3b27c 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  /* Header / footer / dark bands */
+  .bg-night { background: radial-gradient(120% 140% at 85% -20%, #3a2510 0%, transparent 55%), linear-gradient(180deg, #0b0b0b 0%, #161009 100%); }
+  .bg-umber-band { background: #6d3f0e; }
+  .bg-deal-band { background: #222222; }
+  .btn-gold { @apply bg-gold-soft text-ink hover:bg-gold-line; }
+  .btn-ink { @apply bg-ink text-white hover:bg-ink-2; }
+  .pill-link { @apply inline-flex shrink-0 items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-ink-2 shadow-[0_1px_2px_rgba(0,0,0,0.06)] ring-1 ring-black/5 transition hover:ring-gold; }
+
+  /* Buttons */
+  .btn { @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold whitespace-nowrap transition disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-sm { @apply h-9 rounded-lg px-3 text-xs; }
+  .btn-primary { @apply bg-primary text-white shadow-sm hover:opacity-90; }
+  .btn-brand { @apply bg-brand text-white shadow-sm hover:opacity-90; }
+  .btn-dark { @apply bg-slate-900 text-white hover:bg-slate-800; }
+  .btn-outline { @apply border border-slate-300 bg-white text-slate-700 hover:border-primary hover:text-primary; }
+  .btn-ghost { @apply text-slate-600 hover:bg-slate-100; }
+  .btn-danger { @apply bg-rose-600 text-white hover:bg-rose-700; }
+  .btn-success { @apply bg-emerald-600 text-white hover:bg-emerald-700; }
+  .btn-wa { @apply bg-[#25D366] text-white hover:opacity-90; }
+
+  /* Forms */
+  .input { @apply h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-slate-50; }
+  textarea.input { @apply h-auto min-h-24 py-2.5; }
+  .input-sm { @apply h-9 rounded-lg text-xs; }
+  .label { @apply mb-1.5 block text-sm font-medium text-slate-700; }
+
+  .card { @apply rounded-2xl border border-slate-200 bg-white; }
+  .badge { @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap; }
+
+  /* Rich text from the admin editor */
+  .prose-content { @apply text-[15px] leading-7 text-slate-700; }
+  .prose-content h1, .prose-content h2 { @apply mt-6 mb-3 text-xl font-bold text-slate-900; }
+  .prose-content h3, .prose-content h4 { @apply mt-5 mb-2 text-lg font-semibold text-slate-900; }
+  .prose-content p { @apply my-3; }
+  .prose-content ul { @apply my-3 list-disc pl-6; }
+  .prose-content ol { @apply my-3 list-decimal pl-6; }
+  .prose-content li { @apply my-1; }
+  .prose-content a { @apply text-primary underline; }
+  .prose-content img { @apply my-4 h-auto max-w-full rounded-xl; }
+  .prose-content table { @apply my-4 w-full border-collapse overflow-hidden rounded-xl text-sm; }
+  .prose-content td, .prose-content th { @apply border border-slate-200 px-3 py-2 text-left; }
+  .prose-content tr:nth-child(odd) td { @apply bg-slate-50; }
+  .prose-content blockquote { @apply my-4 border-l-4 border-primary bg-slate-50 px-4 py-2 italic; }
+  .prose-content iframe { @apply my-4 aspect-video h-auto w-full rounded-xl; }
+}
+
+/* Key features in the product price box: one plain line per feature, bold label, no bullets */
+.key-feats { font-size: 14px; line-height: 1.6; color: #3d3d3d; overflow-wrap: anywhere; }
+.key-feats ul, .key-feats ol { list-style: none; margin: 0; padding: 0; }
+.key-feats li, .key-feats p { margin: 0; }
+.key-feats strong, .key-feats b { font-weight: 700; color: #111111; }
+.key-feats h1, .key-feats h2, .key-feats h3, .key-feats h4 { margin: 0 0 4px; font-size: 15px; font-weight: 700; color: #111111; }
+.key-feats a { color: #a0650a; text-decoration: underline; }
+
+/* Product pages keep a bar at the bottom of the screen: lift the WhatsApp bubble above it and
+   leave room under the footer so nothing hides behind it */
+@media (min-width: 1024px) {
+  body:has([data-product-bar]) .wa-float { bottom: 7.5rem; }
+  body:has([data-product-bar]) .footer-dark { padding-bottom: 7.5rem; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@keyframes slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes slide-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.animate-slide-right { animation: slide-in-right 0.25s ease-out; }
+.animate-slide-left { animation: slide-in-left 0.25s ease-out; }
+.animate-fade { animation: fade-in 0.2s ease-out; }
+
+/* ── Fly to cart (lib/flyToCart.js) ───────────────────────── */
+.fly-to-cart-ghost {
+  position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
+  object-fit: contain; background: #fff; border-radius: 16px;
+  box-shadow: 0 18px 40px -12px rgba(15, 23, 42, 0.45);
+  will-change: transform, opacity; backface-visibility: hidden; contain: layout paint;
+}
+@keyframes cart-landing {
+  0% { transform: scale(1); } 30% { transform: scale(1.28); } 55% { transform: scale(0.92); }
+  75% { transform: scale(1.08); } 100% { transform: scale(1); }
+}
+.cart-landing { animation: cart-landing 0.46s cubic-bezier(0.3, 0.7, 0.4, 1.4); }
+@keyframes cart-badge-pop { 0% { transform: scale(0.4); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+.cart-badge-pop { animation: cart-badge-pop 0.38s cubic-bezier(0.3, 0.7, 0.4, 1.5); }
+
+/* ── Reveal on scroll (components/store/RevealOnScroll.js) ── */
+@keyframes reveal-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+html[data-reveal-on] [data-reveal][data-revealed='wait'] { opacity: 0; }
+html[data-reveal-on] [data-reveal][data-revealed='1'] { animation: reveal-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s) backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-landing, .cart-badge-pop { animation: none !important; }
+  html[data-reveal-on] [data-reveal] { opacity: 1 !important; animation: none !important; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+}
+
+/* Bangla text (buttons, headings, landing pages) */
+.font-bn { font-family: var(--font-bangla), var(--font-urbanist), ui-sans-serif, system-ui, sans-serif; }
+
+/* ── Product card: the grey action tab that rises out of the card body (concave corner on its left) ── */
+.card-tab { position: relative; }
+.card-tab::before {
+  content: ''; position: absolute; left: -16px; bottom: 0; width: 16px; height: 16px;
+  background: radial-gradient(circle at 0 0, transparent 15.5px, var(--color-surface) 16px);
+}
+
+/* ── Scrolling announcement strip under the header ── */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 45s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* ── Horizontal product / category rails ── */
+.rail { scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; }
+.rail > * { scroll-snap-align: start; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .rail { scroll-behavior: auto; }
+}
+
+/* Small icons drawn by CSS (no SVG elements) for the buttons on every product card */
+.i-mask { display: inline-block; flex-shrink: 0; background-color: currentColor; -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.i-cart { --i: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='8' cy='21' r='1'/><circle cx='19' cy='21' r='1'/><path d='M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12'/></svg>"); }
+.i-zap { --i: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M13 2 3 14h9l-1 8 10-12h-9z'/></svg>"); }
+.i-eye { --i: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z'/><circle cx='12' cy='12' r='3'/></svg>"); }
